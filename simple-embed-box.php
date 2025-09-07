@@ -12,9 +12,11 @@ add_action('wp_head', function(){
             position: relative;
             width: 100%;
             padding-bottom: 56.25%; /* نسبت 16:9 */
-            height: 200px;
+            height: 210px;
             overflow: hidden;
             padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.3);
             margin: 10px auto;
         }
         .seb-embed iframe { 
@@ -153,3 +155,100 @@ function seb_admin_page() {
     </div>
     <?php
 }
+
+add_action('wp_footer', function () {
+    ?>
+    <style>
+    .wp-video {
+        position: relative;
+        width: 700px !important;
+        max-width: 100% !important;
+        margin: 15px auto;
+        background: #222;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.3);
+    }
+    .wp-video::before {
+        content: "";
+        display: block;
+        padding-top: 56.25%; /* نسبت 16:9 */
+    }
+    .wp-video video,
+    .wp-video .mejs-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+   .mejs-overlay{
+        width: 700px !important;
+        height: 400px !important;
+    }
+    @media (max-width: 768px) {
+        .mejs-overlay{
+            width: 370px !important;
+            height: 196px !important;
+        }
+    }
+        /* استایل برای وسط‌چین شدن ویدیو */
+        /*.elementor-widget-container .wp-video,*/
+        /*.category video {*/
+        /*    display: block !important;*/
+        /*    margin: 0 auto !important;*/
+        /*    max-width: 100% !important;*/
+        /*    height: auto !important;*/
+        /*    width: 700px !important;*/
+        /*    background-color: #222222;*/
+        /*    padding: 4px;*/
+        /*    border-radius: 12px;*/
+        /*    box-shadow: 0px 0px 9px 1px;*/
+        /*    margin: 5px auto !important;*/
+        /*}*/
+        /*.mejs-overlay{*/
+        /*    width: 700px !important;*/
+        /*}*/
+        /*  @media (max-width: 768px) {*/
+        /*    .elementor-widget-container .wp-video,*/
+        /*    .category video {*/
+        /*        width: 100% !important;*/
+        /*        max-width: 100% !important;*/
+        /*        margin: 10px auto !important;*/
+        /*    }*/
+        /*    .mejs-overlay {*/
+        /*        width: 380px !important;*/
+        /*        height: 300px !important;*/
+        /*    }*/
+        /*    .wp-video-shortcode{*/
+        /*        height: 290px !important;*/
+        /*    }*/
+        /*    .video-centered {*/
+        /*        width: 400px;*/
+        /*        height: 300px !important;*/
+        /*        min-width: 185px;*/
+        /*    }*/
+        /*}*/
+    </style>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("video").forEach(function(video){
+            let link = video.querySelector("a[href]");
+            if(link){
+                let src = link.getAttribute("href");
+                if(!video.querySelector("source")){
+                    let source = document.createElement("source");
+                    source.src = src;
+                    source.type = "video/mp4";
+                    video.appendChild(source);
+                }
+                link.remove();
+            }
+            // یه کلاس هم اضافه کنیم برای وسط‌چین مطمئن
+            video.classList.add("video-centered");
+        });
+    });
+    </script>
+    <?php
+});
